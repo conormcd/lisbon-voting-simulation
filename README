@@ -1,0 +1,54 @@
+INTRODUCTION
+------------
+
+This is a program which brute-forces all permutations of voting in the Council
+of the European Union to show the number of times a country gets its way both
+before and after the Treaty of Lisbon comes into effect.
+
+HOW TO BUILD AND RUN THE PROGRAM
+--------------------------------
+
+The program was developed on a Mac and while every effort was made to only use
+standard, widely available library functions you may have trouble building or
+running it on another platform. Patches to make the program more portable would
+be much appreciated.
+
+On any Mac or UNIX-like operating system with gcc and make installed, building
+the program should be as simple as typing "make" at a command prompt in the
+directory where the source and Makefile are.
+
+GLOSSARY / EXPLANATION OF THE CONCEPTS
+--------------------------------------
+
+"Nice 50%"		A voting method set out in the Nice Treaty. For a decision to
+				pass it must have a majority of the countries in favour, at
+				least 74% of the weighted votes in favour and 62% of the
+				population in favour.
+"Nice 67%"		A voting method set out in the Nice Treaty. For a decision to
+				pass it must have a two-thirds majority of countries in favour,
+				74% of the weighted votes in favour and 62% of the population
+				in favour.
+"TEU 16 (4)"	A voting method described in the Lisbon Treaty. For a decision
+				to pass it must have 55% of countries in favour and 65% of the
+				population in favour. A decision may be blocked by any four
+				countries.
+"TFEU 238 (1)"	A voting method described in the Lisbon Treaty. For a decision
+				to pass, a simple majority of countries is required.
+"TFEU 238 (2)"	A voting method described in the Lisbon Treaty. For a decision
+				to pass, 72% of countries and 65% of the population must be in
+				favour.
+"influence"		A participant in a vote has "influence" if the outcome of a
+				vote would change if that participant changed their vote.
+"win"			Where the outcome of a vote matches the vote that a participant
+				made.
+
+Examples:
+
+        Alice  Bob  Charlie
+Vote 1  Yes    Yes  No
+Vote 2  No     Yes  No
+Vote 3  Yes    Yes  Yes
+
+In vote 1, Alice and Bob both win and both have influence.
+In vote 2, Alice and Charlie both win and both have influence.
+In vote 3, Alice, Bob and Charlie all win but none of them have influence.
