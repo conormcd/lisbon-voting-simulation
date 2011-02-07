@@ -63,6 +63,6 @@ Examples:
 	<tr><th>Vote 3</th><td>Yes</td><td>Yes</td><td>Yes</td></tr>
 </table>
 
-In vote 1, Alice and Bob both win and both have influence.
-In vote 2, Alice and Charlie both win and both have influence.
-In vote 3, Alice, Bob and Charlie all win but none of them have influence.
+* In vote 1, Alice and Bob both win and both have influence.
+* In vote 2, Alice and Charlie both win and both have influence.
+* In vote 3, Alice, Bob and Charlie all win but none of them have influence.
