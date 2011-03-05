@@ -166,13 +166,11 @@ void analyse(uint32_t vote, analysis_t* analysis) {
 			analysis->countries_for++;
 			analysis->population_for += countries[bit].population;
 			analysis->nice_votes_for += countries[bit].nice_weight;
-		} else {
-			// The country voted against the proposal
-			analysis->countries_against++;
-			analysis->population_against += countries[bit].population;
-			analysis->nice_votes_against += countries[bit].nice_weight;
 		}
 	}
+	analysis->countries_against = analysis->countries - analysis->countries_for;
+	analysis->population_against = analysis->population - analysis->population_for;
+	analysis->nice_votes_against = analysis->nice_votes - analysis->nice_votes_for;
 
 	// Now calculate the percentages
 	analysis->countries_for_pc = PERCENT(analysis->countries_for, analysis->countries);
@@ -197,12 +195,9 @@ int main() {
 	}
 
 	// Make space for the results
-	uint32_t* results = calloc(max_vote_permutations, sizeof(uint32_t));
-	bzero(results, max_vote_permutations * sizeof(uint32_t));
+	uint8_t* results = calloc(max_vote_permutations, sizeof(uint8_t));
 	uint32_t* wins = calloc(max_vote_permutations, sizeof(uint32_t));
-	bzero(wins, max_vote_permutations * sizeof(uint32_t));
 	uint32_t* influences = calloc(max_vote_permutations, sizeof(uint32_t));
-	bzero(influences, max_vote_permutations * sizeof(uint32_t));
 
 	// Work through all of the vote permutations analysing each one
 	analysis_t analysis;
@@ -236,17 +231,19 @@ int main() {
 	for (uint32_t vote_permutation = 0; vote_permutation < max_vote_permutations; vote_permutation++) {
 		for (uint8_t country = 0; country < num_countries; country++) {
 			for (uint8_t method = 0; method < num_methods; method++) {
-				bool this_result = false;
-				if (results[vote_permutation] & (1 << method)) {
-					this_result = true;
-				}
-				bool country_vote_changed_result = false;
-				if (results[vote_permutation ^ (1 << country)] & (1 << method)) {
-					country_vote_changed_result = true;
-				}
+				if (vote_permutation > (vote_permutation ^ (1 << country))) { // Symmetrical, only bother calculating one.
+					bool this_result = false;
+					if (results[vote_permutation] & (1 << method)) {
+						this_result = true;
+					}
+					bool country_vote_changed_result = false;
+					if (results[vote_permutation ^ (1 << country)] & (1 << method)) {
+						country_vote_changed_result = true;
+					}
 
-				if (this_result != country_vote_changed_result) {
-					influences[(country * num_methods) + method]++;
+					if (this_result != country_vote_changed_result) {
+						influences[(country * num_methods) + method] += 2;
+					}
 				}
 			}
 		}
@@ -301,7 +298,6 @@ int main() {
 
 	// Find the widths of all the columns
 	uint8_t* column_widths = calloc(output_columns, sizeof(uint8_t));
-	bzero(column_widths, output_columns * sizeof(uint8_t));
 	for (uint8_t i = 0; i < output_rows; i++) {
 		for (uint8_t j = 0; j < output_columns; j++) {
 			uint8_t col_width = strlen(output_wins[(i * output_columns) + j]);
